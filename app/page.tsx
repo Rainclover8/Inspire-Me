@@ -1,10 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 
-
-interface Quote{
-  content:string,
-  author:string
+interface Quote {
+  quote: string;
+  author: string;
 }
 
 export default function Home() {
@@ -12,11 +11,20 @@ export default function Home() {
   const [data, setData] = useState<Quote | null>(null);
 
   useEffect(() => {
-    fetch("https://api.quotable.io/random")
+    fetch("https://api.api-ninjas.com/v1/quotes", {
+      headers: {
+        "x-api-key": "v2vWbLqTSEKhmvxModiR7A==CWaD0nJXCaktxFw8",
+      },
+    })
       .then((res) => res.json())
       .then((data) => {
-        setData(data);
+        console.log(data[0]);
+        setData(data[0]);
         setLoader(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching quote:", error);
+        setLoader(false);  // Yükleme bitmeden hata gösterimi engellenmiş olur
       });
   }, []);
 
@@ -30,10 +38,10 @@ export default function Home() {
         ) : (
           <div>
             <h1 className="text-black text-center flex justify-center items-center h-full italic md:text-4xl text-xl px-4">
-              "{data?.content}"
+              "{data?.quote}"
             </h1>
-            <h2 className="text-black/70 pl-9  italic md:text-[40px] mt-4">
-              Writer : {data?.author}
+            <h2 className="text-black/70 pl-9 italic md:text-[40px] mt-4">
+              Writer: {data?.author}
             </h2>
           </div>
         )}
